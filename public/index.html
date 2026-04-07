@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Periodt - Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600;700&family=Afacad:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <img src="images/periodt-logo.svg" alt="Periodt Logo" class="logo">
+
+  <h1>Periodt.</h1>
+
+  <p><a href="https://git.nwt.fhstp.ac.at/cc241007/ccl3-ws2025/-/tree/master?ref_type=heads">Link to GitLab Repository</a></p>
+
+  <p><a href="apk%20file/app-debug.apk" download="Periodt-app-debug.apk" type="application/vnd.android.package-archive" class="download-button" role="button" aria-label="Download APK">Download APK</a></p>
+
+  <h2>Description</h2>
+  <p>A period tracker app that helps women track their mood and health throughout and around their period. It helps them understand their cycles better.</p>
+
+  <p>Within the app you'd be able to:</p>
+  <ul>
+    <li>Track your cycle stage</li>
+    <li>Log any symptoms or other activities within the app</li>
+    <li>See your logs and cycle stages within a calendar view</li>
+    <li>See the predictions for future periods</li>
+  </ul>
+
+  <h2>Team Members</h2>
+  <p class="team-members">Angelina Hess, Diana Ivanova</p>
+
+  <hr>
+
+  <h2>App Concept</h2>
+
+  <h3>Target Users and Use Case</h3>
+  <p>We are specifically targeting menstruating student girls who'd like to understand how their bodies and cycles work.</p>
+
+  <p>A use case example would be, starting your period and logging it within the app to get information on when your next cycle starts.</p>
+
+  <h3>User Flow</h3>
+  <img src="images/user_flow.png" alt="User Flow Diagram" class="user-flow-image">
+
+  <h3>Hi-Fi Prototype</h3>
+  <div class="prototype-grid">
+    <img src="images/Splash.png" alt="Splash Screen" class="prototype-image">
+    <img src="images/Homepage.png" alt="Homepage" class="prototype-image">
+    <img src="images/Track.png" alt="Log Symptoms Screen" class="prototype-image">
+    <img src="images/Calendar.png" alt="Calendar View" class="prototype-image">
+    <img src="images/Calendar-2.png" alt="Calendar View Extended" class="prototype-image">
+    <img src="images/edit log.png" alt="Edit Period Dates" class="prototype-image">
+    <img src="images/Calendar-1.png" alt="Calendar View with Edit" class="prototype-image">
+  </div>
+
+  <h3>Design of the SQLite database (Entity Relationship Diagram – ERD)</h3>
+  <p>The database architecture is organized into three layers:</p>
+  <ul>
+    <li><strong>Physical Database Tables (shown below):</strong> Data saved to disk with foreign key relationships</li>
+    <li><strong>PopulatedDailyLog Data Class (shown in second diagram):</strong> An in-memory view constructed by Room that aggregates data from multiple tables</li>
+    <li><strong>Prediction Logic Models (shown in third diagram):</strong> Calculated models that generate cycle forecasts and predictions based on historical data</li>
+  </ul>
+
+  <div class="diagram-container">
+    <div class="mermaid">
+erDiagram
+    %% ---------------------------------------------------
+    %% PHYSICAL DATABASE TABLES
+    %% ---------------------------------------------------
+    CYCLES {
+        int id PK
+        long start_date
+        long end_date
+        int periodLength
+        int cycleLength
+    }
+
+    CYCLE_LOGS {
+        int id PK
+        int cycleId FK
+        long log_date
+        string flow
+    }
+
+    MOOD_LOGS {
+        int id PK
+        int log_id FK
+        string moodType
+    }
+
+    SYMPTOM_LOGS {
+        int id PK
+        int log_id FK
+        string symptomType
+    }
+
+    ACTIVITY_LOGS {
+        int id PK
+        int log_id FK
+        string activityType
+    }
+
+    CRAVING_LOGS {
+        int id PK
+        int log_id FK
+        string cravingType
+    }
+
+    SEX_TYPE_LOGS {
+        int id PK
+        int log_id FK
+        string sexType
+    }
+
+    ENERGY_LOGS {
+        int id PK
+        int log_id FK
+        string energyType
+    }
+
+    %% ---------------------------------------------------
+    %% DATABASE RELATIONSHIPS
+    %% ---------------------------------------------------
+    CYCLES ||--o{ CYCLE_LOGS : "contains"
+    CYCLE_LOGS ||--o{ MOOD_LOGS : "has"
+    CYCLE_LOGS ||--o{ SYMPTOM_LOGS : "has"
+    CYCLE_LOGS ||--o{ ACTIVITY_LOGS : "has"
+    CYCLE_LOGS ||--o{ CRAVING_LOGS : "has"
+    CYCLE_LOGS ||--o{ SEX_TYPE_LOGS : "has"
+    CYCLE_LOGS ||--o{ ENERGY_LOGS : "has"
+    </div>
+  </div>
+
+  <h4>PopulatedDailyLog Data Class (In-Memory View)</h4>
+  <p>The <code>PopulatedDailyLog</code> is a Room data class that aggregates data from multiple tables in memory using <code>@Embedded</code> and <code>@Relation</code> annotations:</p>
+
+  <div class="diagram-container">
+    <div class="mermaid">
+erDiagram
+    POPULATED_DAILY_LOG {
+        CycleLogsEntity log
+        List-Moods moods
+        List-Symptoms symptoms
+        List-Activities activities
+        List-Cravings cravings
+        List-Sex sex
+        List-Energy energy
+    }
+
+    CYCLE_LOGS {
+        int id PK
+        int cycleId FK
+        long log_date
+        string flow
+    }
+
+    MOOD_LOGS {
+        int id PK
+        int log_id FK
+        string moodType
+    }
+
+    SYMPTOM_LOGS {
+        int id PK
+        int log_id FK
+        string symptomType
+    }
+
+    ACTIVITY_LOGS {
+        int id PK
+        int log_id FK
+        string activityType
+    }
+
+    CRAVING_LOGS {
+        int id PK
+        int log_id FK
+        string cravingType
+    }
+
+    SEX_TYPE_LOGS {
+        int id PK
+        int log_id FK
+        string sexType
+    }
+
+    ENERGY_LOGS {
+        int id PK
+        int log_id FK
+        string energyType
+    }
+
+    %% How PopulatedDailyLog aggregates data
+    POPULATED_DAILY_LOG ||--|| CYCLE_LOGS : "embeds"
+    POPULATED_DAILY_LOG ||--o{ MOOD_LOGS : "collects"
+    POPULATED_DAILY_LOG ||--o{ SYMPTOM_LOGS : "collects"
+    POPULATED_DAILY_LOG ||--o{ ACTIVITY_LOGS : "collects"
+    POPULATED_DAILY_LOG ||--o{ CRAVING_LOGS : "collects"
+    POPULATED_DAILY_LOG ||--o{ SEX_TYPE_LOGS : "collects"
+    POPULATED_DAILY_LOG ||--o{ ENERGY_LOGS : "collects"
+    </div>
+  </div>
+
+  <h4>Prediction Logic Models (Calculated on the Fly)</h4>
+  <p>The app uses prediction models that calculate cycle forecasts and period predictions based on historical data from the database:</p>
+
+  <div class="diagram-container">
+    <div class="mermaid">
+erDiagram
+    CYCLE_PREDICTION {
+        Date predictedPeriodStartDate
+        Date ovulationDate
+        Date fertileWindowStartDate
+        int averageCycleLength
+        boolean isIrregular
+    }
+
+    PERIOD_LOG {
+        Date date
+        FlowType flow
+        DischargeType discharge
+        SexType sex
+        Energy energy
+    }
+
+    CYCLES {
+        int id PK
+        long start_date
+        long end_date
+        int periodLength
+        int cycleLength
+    }
+
+    CYCLE_LOGS {
+        int id PK
+        int cycleId FK
+        long log_date
+        string flow
+    }
+
+    %% Prediction Logic Flow
+    CYCLES ||--o{ CYCLE_PREDICTION : "generates predictions"
+    CYCLE_LOGS ||--|| PERIOD_LOG : "maps to transient"
+    PERIOD_LOG }o--|| CYCLE_PREDICTION : "calculates"
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Usability Test Plan</h2>
+
+  <h3>Heuristic Evaluation</h3>
+  <div class="heuristic-table-wrapper">
+  <table class="heuristic-table">
+    <thead>
+    <tr>
+      <th>Page</th>
+      <th>Problem</th>
+      <th>Heuristic</th>
+      <th>Problem Severity</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Home page</td>
+      <td>There is a scroll issue connected with the cycle circle. When a user tries scrolling down on the screen, they unwantedly go to another date but do not stay at today's date.</td>
+      <td>3. User Control and freedom</td>
+      <td><span class="severity major">Major</span></td>
+    </tr>
+    <tr>
+      <td>Home page</td>
+      <td>At the Calendar strip at the top if another date is picked, going back to today's date isn't clear enough. A text button that says "Today" would be better.</td>
+      <td>3. User Control and freedom</td>
+      <td><span class="severity major">Major</span></td>
+    </tr>
+    <tr>
+      <td>Calendar/Log Symptoms page</td>
+      <td>When trying to log period it might be confusing that there are 2 ways of logging period dates (through Log Symptoms page by logging Menstrual flow or through the calendar by adding period dates).</td>
+      <td>4. Consistency and Standards</td>
+      <td><span class="severity major">Major</span></td>
+    </tr>
+    <tr>
+      <td>Home page</td>
+      <td>In the Calendar strip a user can select future dates meaning they can log data for the future, which will lead to errors when it comes to predictions.</td>
+      <td>5. Error prevention</td>
+      <td><span class="severity minor">Minor</span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Target Users</h3>
+  <p>Young female university students who need a reliable period tracking app.</p>
+
+  <h3>Hypotheses</h3>
+
+  <p class="hypothesis-statement">Separating the vertical page scroll from the cycle-circle interaction will significantly reduce the number of accidental date changes.</p>
+  <p><strong>Testable question:</strong> Does decoupling the scroll interaction from the date selection element reduce the user error rate?</p>
+  <ul>
+    <li><strong>Dependent variable:</strong> The number of times a user unintentionally switches dates while trying to scroll</li>
+    <li><strong>Independent variable:</strong> Current design of the Cycle circle</li>
+  </ul>
+
+  <p class="hypothesis-statement">Implementing a 'Return to Today' button will decrease the time required for users to navigate back to the current date.</p>
+  <p><strong>Testable question:</strong> How does a 'Return to Today' button impact the time for navigating back to the current date?</p>
+  <ul>
+    <li><strong>Dependent variable:</strong> Time for navigating back to the current date</li>
+    <li><strong>Independent variable:</strong> Implementing a "Return to Today" button</li>
+  </ul>
+
+  <p class="hypothesis-statement">Users will complete the task of logging period dates faster using the Calendar screen compared to logging the Menstrual flow.</p>
+  <p><strong>Testable question:</strong> Which logging way (Calendar Screen vs. Log Symptoms Screen) is more efficient for period dates?</p>
+  <ul>
+    <li><strong>Dependent variable:</strong> Time/Efficiency when logging period dates</li>
+    <li><strong>Independent variable:</strong> Menstrual Flow logging or Calendar logging</li>
+  </ul>
+
+  <h3>Planned data to collect</h3>
+  <p>We plan to collect user demographics to ensure they match our target group, along with SEQ, SUS, and feedback form results. For qualitative data, we will observe the thoughts, actions, and behaviors of users while they use the app. Our goal is to identify whether the app is intuitive.</p>
+
+  <h3>Methods</h3>
+  <p>To evaluate the app's usability we conducted 2 rounds of user testing. The user tests were conducted in quiet spaces in the university utilizing a controlled standardized setup. For each test session both team members were present:</p>
+  <ul>
+    <li>One responsible for guiding the user through the tasks, and providing the questionnaires (SEQ and SUS, feedback form)</li>
+    <li>One being a note taker, responsible for observing the session and recording qualitative data, including user actions, quotes, errors, etc.</li>
+  </ul>
+
+  <p>The users were asked to perform 5 tasks:</p>
+  <ol>
+    <li>Select a day you want to add a daily symptom log for, using the cycle wheel and scroll down. Now log your symptoms for that day.</li>
+    <li>Find your logs in the calendar.</li>
+    <li>In the calendar strip, select a date within another month and then navigate back to today's date efficiently.</li>
+    <li>Please log a 5-day period on any day and then delete it.</li>
+    <li>Please log your period dates for the last 3 months and check the accuracy for your Cycle and Period averages.</li>
+  </ol>
+
+  <p>We conducted:</p>
+  <ul>
+    <li>Formative testing with 5 people during the development of the app in order to check if all of our features were intuitive enough.</li>
+    <li>Summative testing round was conducted following the implementation of user feedback with three participants to verify that the changes effectively resolved the identified issues and enhanced the overall user experience.</li>
+  </ul>
+
+  <p>During both the Summative and Formative round of testing the test users were given:</p>
+  <ul>
+    <li>Informed consent about the user testing</li>
+    <li>Participation form, where we collected their demographics data as well as their period tracking preferences</li>
+    <li>SEQ questionnaire after every task</li>
+    <li>SUS questionnaire after all of the tasks</li>
+    <li>Optional feedback form</li>
+  </ul>
+
+  <hr>
+
+  <h2>User Test Results</h2>
+
+  <h3>How many test subjects participated in the test (with their demographics)</h3>
+  <p>Our test users were 8 women (5 in Formative testing; 3 in Summative testing) mainly falling into age range of 18-22 years old, as well as one participant from the 23-25 age range.</p>
+
+  <p>All our test users were interested in learning more about their cycle. The majority said they currently use a dedicated mobile app (such as Flo, Clue, Stardust) to track their cycle. The rest stated they relied on more manual methods like a Calendar/Notes app. Only one participant reported they didn't track their period at all.</p>
+
+  <p>The main frustrations our test users expressed with their current period tracking apps were about monetization, lack of trust when it came to their data privacy and usability.</p>
+
+  <h3>Summary of the quantitative evaluation</h3>
+  <p>Analysis of the SUS questionnaire results confirms that our app achieved an excellent average score of <strong>97.19</strong>.</p>
+
+  <div class="charts-grid">
+    <img src="images/sus-bar-chart.png" alt="SUS Bar Chart" class="chart-image bar-chart">
+    <img src="images/sus-boxplot.png" alt="SUS Box Plot" class="chart-image box-plot">
+  </div>
+
+  <p>Here you can see exactly how the 8 participants answered each of the 10 standard SUS questions:</p>
+
+  <img src="images/sus-response-distribution.png" alt="SUS Response Distribution" class="full-width-chart">
+
+  <p>While participants rated most tasks as 'Easy' or 'Very Easy,' Task 4 ('Log and delete a 5-day period') was a notable exception. Users in the formative testing struggled to locate the delete button due to poor visibility, resulting in significantly lower scores for this task.</p>
+
+  <img src="images/seq.png" alt="SEQ Visualization" class="full-width-chart">
+
+  <h3>Most relevant feedback/comments</h3>
+
+  <h4>Task 1:</h4>
+  <p>Clear clicking and scrolling issue regarding the wheel, some users didn't even notice the unwanted day selection on the wheel while scrolling while others got irritated by the wheel.</p>
+  <ul>
+    <li>Need to fix cycle wheel hit box for scrolling</li>
+    <li>Get the phase prediction logic and placement to work</li>
+  </ul>
+
+  <h4>Task 1.2:</h4>
+  <p>Logging is easy, some wanted to log for a day by clicking on it on the calendar strip.</p>
+  <ul>
+    <li>Need accessible logs through calendar strip</li>
+  </ul>
+
+  <h4>Task 2:</h4>
+  <p>Everyone found the daily logs easily on the calendar.</p>
+
+  <h4>Task 3:</h4>
+  <p>Before, when the get back to today button was an arrow during the pilot, there were difficulties going back. However, after it was changed to "today" text there were no problems.</p>
+  <ul>
+    <li>Today button only works after a day is selected</li>
+  </ul>
+
+  <h4>Task 4:</h4>
+  <p>There were no problems with creating period logs. Using calendar or logs to start period was evenly split. However, to delete, all used calendar. The deleting button was difficult to spot at times.</p>
+  <ul>
+    <li>Clarify clicking no period in logs deletes period</li>
+    <li>Make delete button in create period calendar more obvious</li>
+    <li>Create a delete button within the calendar popup</li>
+    <li>After logging, user should stay in logs page to log any additional days</li>
+  </ul>
+
+  <h4>Task 5:</h4>
+  <p>Only a few users were able to compare their cycle accuracy so many skipped this task. However, everyone easily found the stats info on profile. Those who were able to compare said the predictions were pretty accurate.</p>
+  <ul>
+    <li>Fix current day predictions and how it displays on the wheel</li>
+  </ul>
+
+  <h3>Mentions to any updates made to the app because of the received feedback</h3>
+
+  <ul>
+    <li>Enabled double-clicking on a calendar strip day to open that specific day's popup</li>
+    <li>Improved the Today button behaviour so it functions even when no day is currently selected</li>
+    <li>Replaced the arrow icon with a clearly labelled Today button to improve clarity and discoverability</li>
+    <li>Implemented dynamic wheel behaviour that adapts based on the selected day's cycle ID</li>
+    <li>Added a delete button within the popup and increased its prominence in the edit period flow</li>
+    <li>Differentiated between create period and edit period states based on whether the selected calendar day already contains a period</li>
+    <li>Updated the symptom logging flow so that after saving a log, a confirmation notification appears while the user remains on the logs page</li>
+  </ul>
+
+  <hr>
+
+  <h2>Final Reflections</h2>
+
+  <h3>Angelina Hess</h3>
+  <p>The Hi-Fi prototype was built collaboratively, with a focus on bringing together functionality, interaction, and visual design in a way that felt cohesive and easy to use. The work covered several core features, including:</p>
+  <ul>
+    <li>Defining and implementing the prediction logic that powers cycle insights</li>
+    <li>Designing the cycle wheel to clearly show the current phase, ovulation, and upcoming periods</li>
+    <li>Creating a calendar strip that adapts to predictions and links directly to calendar data</li>
+  </ul>
+
+  <p>A lot of attention was also given to the overall structure and navigation, so the app felt intuitive to move through. This included:</p>
+  <ul>
+    <li>Designing the nav bar for easy access to key sections</li>
+    <li>Shaping the homepage as a central overview of cycle information</li>
+    <li>Exploring widget functionality for quick, at-a-glance insights</li>
+    <li>Making layout decisions that kept information readable and well-spaced</li>
+  </ul>
+
+  <p>Visual design was treated as an ongoing process rather than a final step. This work included:</p>
+  <ul>
+    <li>Refining overall styling and visual consistency</li>
+    <li>Designing the splash screen and first-time experience</li>
+    <li>Building the profile page and linking it to prediction data</li>
+    <li>Focusing on the display and styling of predictions, especially how ovulation is presented</li>
+  </ul>
+
+  <p>Finally, usability testing helped ground the design decisions in real user feedback. This involved:</p>
+  <ul>
+    <li>Acting as a note taker during testing sessions</li>
+    <li>Identifying areas of confusion or friction</li>
+    <li>Implementing changes based on tester feedback to improve clarity, flow, and overall usability</li>
+  </ul>
+
+  <h4>Challenges:</h4>
+  <ul>
+    <li>Making the cycle wheel adapt dynamically according to phase lengths and period start, and making today's date show on the wheel</li>
+    <li>Resolving merging issues and following the git branch logic</li>
+    <li>Getting the predictions to work and correctly predict the period, ovulation dates, and phases</li>
+    <li>Figuring out the logic behind how the system would store and log data</li>
+    <li>Connecting everything to the database correctly. Diana did the initial logic for the repository and database, so there was a slight miscommunication about how things were stored that caused no database-level issues and prevented some features from working. Still, it was resolved once we could visualize how the data was stored</li>
+  </ul>
+
+  <h3>Diana Ivanova</h3>
+  <p>Firstly we worked together on the foundational aspects of the project, and specifically:</p>
+  <ul>
+    <li><strong>Database Design:</strong> Structuring the schema to handle user data and cycle tracking.</li>
+    <li><strong>Hi-Fi Prototype:</strong> Designing the user flow and visual interface before implementation.</li>
+  </ul>
+
+  <p>After having a clear idea on the database design, I was responsible for setting up the Database layer. Additionally, I focused on the Calendar functionality, Symptom Logging flow, and CRUD operations for period tracking:</p>
+  <ul>
+    <li>Implementation of the main calendar view</li>
+    <li>Logic for adding, editing, and deleting period dates</li>
+    <li>Displaying symptoms on the pop-up dialog in the Calendar screen</li>
+    <li>Logic for adding, editing, and deleting specific symptoms</li>
+    <li>Implemented the functionality to start a period directly from the Log Symptoms flow (connecting it to the Calendar)</li>
+    <li>General styling and customizing the icons, so that it matches our Hi-Fi prototype as much as possible</li>
+  </ul>
+
+  <p>During the User testing phase I was responsible for guiding the user through the tasks, and providing the questionnaires (SEQ and SUS, feedback form).</p>
+
+  <h4>Challenges:</h4>
+  <ul>
+    <li>Managing to make the possibility to start a period both from logging "flow" in the Log Symptoms screen and starting a period in the Calendar work</li>
+    <li>Merge conflicts, git issues, and changes disappearing after merging</li>
+    <li>Realized there are issues with the calendar and log symptoms page connection when logging period dates and fixing that was a challenge</li>
+    <li>The cycle wheel was breaking because of the code that I added after solving the merge issues</li>
+  </ul>
+
+  <h3>How the final app meets the initial concept</h3>
+  <p>Our period app shows all relevant information regarding the user's cycle, uses users' logs and inputted data to predict cycles and inform them on personalized information regarding their menstrual cycle.</p>
+
+  <h3>What could be further improved, if possible</h3>
+  <ul>
+    <li>Fix the scrollability of the homepage</li>
+    <li>Account for different phone types and screen sizes (scrollability and accessibility)</li>
+    <li>Adjust the prediction to be more accurate and display better on the profile page</li>
+    <li>Implement a boyfriend mode</li>
+  </ul>
+
+</div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Afacad', sans-serif;
+  line-height: 1.7;
+  color: #333;
+  background-color: #fff;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+h1 {
+  font-family: 'Spectral', serif;
+  font-size: 3rem;
+  color: #D5756D;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-family: 'Spectral', serif;
+  font-size: 1.8rem;
+  color: #D5756D;
+  margin: 2.5rem 0 1rem;
+}
+
+h3 {
+  font-family: 'Spectral', serif;
+  font-size: 1.3rem;
+  color: #1e3a5f;
+  margin: 1.5rem 0 0.5rem;
+}
+
+h4 {
+  font-family: 'Spectral', serif;
+  font-size: 1.1rem;
+  color: #1e3a5f;
+  margin: 1.2rem 0 0.5rem;
+  font-weight: 600;
+}
+
+a {
+  color: #D5756D;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.hypothesis-statement {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 1.5rem;
+}
+
+ul {
+  margin: 1rem 0 1rem 2rem;
+}
+
+ol {
+  margin: 1rem 0 1rem 2rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+.team-members {
+  margin: 0.5rem 0;
+}
+
+.heuristic-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.heuristic-table thead {
+  background-color: #D5756D;
+  color: white;
+}
+
+.heuristic-table th {
+  padding: 1rem;
+  text-align: left;
+  font-family: 'Spectral', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.heuristic-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+
+.heuristic-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.user-flow-image {
+  width: 100%;
+  height: auto;
+  border: 1px solid #FBACA4;
+  border-radius: 4px;
+  margin: 1rem 0;
+  display: block;
+}
+
+.prototype-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.prototype-image {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  border: 1px solid #FFC49C;
+  border-radius: 4px;
+  object-fit: contain;
+  justify-self: center;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #FBACA4;
+  margin: 2rem 0;
+}
+
+/* Heuristics table styles */
+.heuristic-table-wrapper {
+  overflow-x: auto;
+  margin: 1rem 0 2rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(30,58,95,0.06);
+  border: 1px solid #E6BDB6;
+  background: #fff;
+}
+
+.heuristic-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px; /* allows horizontal scroll on small screens */
+  background: #fff;
+}
+
+.heuristic-table thead th {
+  text-align: left;
+  padding: 0.9rem 1rem;
+  background: #D5756D;
+  color: #ffffff;
+  font-weight: 700;
+  font-family: 'Spectral', serif;
+  border-bottom: 2px solid rgba(215,117,109,0.12);
+  font-size: 0.95rem;
+  /* make header stick to the top when scrolling horizontally/vertically */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  /* stronger vertical separators */
+  border-right: 1px solid rgba(255,255,255,0.2);
+}
+
+.heuristic-table thead th:first-child {
+  border-right: 1px solid #F3D7D1;
+}
+
+.heuristic-table tbody td {
+  padding: 0.9rem 1rem;
+  vertical-align: top;
+  font-size: 0.98rem;
+  color: #2b3b4a;
+  border-bottom: 1px solid #F3D7D1; /* clearer row separator */
+  border-right: 1px solid #F9EAE6; /* column separators */
+}
+
+/* remove right border on last column cells to keep clean outer edge */
+.heuristic-table tbody td:last-child,
+.heuristic-table thead th:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.heuristic-table tbody tr:nth-child(even) {
+  background: linear-gradient(90deg, rgba(255,244,241,0.7), rgba(255,250,249,0.5));
+}
+
+
+/* emphasize first column with a subtle background to help scanning */
+.heuristic-table td:first-child {
+  font-weight: 700;
+  color: #1e3a5f;
+  width: 140px;
+  background: rgba(213,117,109,0.03);
+}
+
+/* small visual polish */
+.heuristic-table thead th {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.heuristic-table td {
+  word-break: break-word;
+}
+
+/* Severity badges */
+.severity {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.severity.major { background: #D75A4C; }
+.severity.minor { background: #F2A86B; color: #2b2b2b; }
+.severity.medium { background: #F6C27A; color: #2b2b2b; }
+.severity.critical { background: #B33A2E; }
+
+/* Make hypothesis statements bolder and add spacing between sections */
+.hypothesis-statement,
+.hypothesis-statement * {
+  font-family: 'Spectral', serif;
+}
+.hypothesis-statement {
+  font-style: normal;
+  color: #1e3a5f;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.6;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Remove top margin from first hypothesis to keep clean spacing after h3 */
+.hypothesis-statement:first-of-type {
+  margin-top: 1rem;
+}
+
+/* Download button next to repository link */
+.download-button {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.5rem 0.9rem;
+  background-color: #D5756D;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border: 2px solid rgba(0,0,0,0.03);
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.download-button:hover,
+.download-button:focus {
+  background-color: #bf574c;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .download-button { margin-left: 0.5rem; padding: 0.45rem 0.7rem; font-size: 0.9rem; }
+}
+
+/* ERD Diagram Container */
+.diagram-container {
+  border: 1px solid #FBACA4;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(213, 117, 109, 0.1);
+  margin: 1.5rem 0;
+  background-color: #fffaf9;
+  overflow-x: auto;
+}
+
+.diagram-container .mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+  body { padding: 1rem; }
+  h1 { font-size: 2.25rem; }
+  .heuristic-table { min-width: 600px; }
+  .prototype-image { max-width: 100%; }
+}
+
+/* Charts for User Test Results */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.chart-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border: 1px solid #FBACA4;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(213, 117, 109, 0.1);
+  object-fit: contain;
+  justify-self: center;
+}
+
+.bar-chart {
+  max-width: 600px;
+  height: 400px;
+  object-fit: contain;
+}
+
+.box-plot {
+  max-width: 400px;
+  height: 400px;
+  object-fit: contain;
+}
+
+.full-width-chart {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border: 1px solid #FBACA4;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(213, 117, 109, 0.1);
+  margin: 1.5rem 0;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
